@@ -1,16 +1,14 @@
-using System.Collections.Generic;
-
 public class Objeto
 {
-    public List<Cara> Caras { get; set; }
+    public List<Parte> Partes { get; set; }
 
     public Objeto()
     {
-        Caras = new List<Cara>();
+        Partes = new List<Parte>();
     }
 
-    public void AgregarCara(Cara cara)
+    public void AgregarParte(Parte parte)
     {
-        Caras.Add(cara);
+        Partes.Add(parte);
     }
 }

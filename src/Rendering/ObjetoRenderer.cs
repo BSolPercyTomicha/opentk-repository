@@ -1,5 +1,5 @@
 using OpenTK.Graphics.OpenGL;
-using System.Linq;
+using OpenTK.Mathematics;
 
 public class ObjetoRenderer
 {
@@ -7,9 +7,17 @@ public class ObjetoRenderer
     private Objeto _objeto;
     private float[] _vertexData;
 
+    // Matrices para la transformación 3D
+    private Matrix4 _projection;
+    private Matrix4 _view;
+    private Matrix4 _model;
+
     public ObjetoRenderer(Objeto objeto)
     {
         _objeto = objeto;
+        _projection = Matrix4.Identity;
+        _view = Matrix4.Identity;
+        _model = Matrix4.Identity;
         ConvertirObjetoADatosVertice();
     }
 
@@ -17,18 +25,23 @@ public class ObjetoRenderer
     {
         var vertexList = new List<float>();
 
-        foreach (var cara in _objeto.Caras)
+        foreach (var parte in _objeto.Partes)
         {
-            foreach (var vertice in cara.Vertices)
+            foreach (var cara in parte.Caras)
             {
-                vertexList.Add(vertice.Position.X);
-                vertexList.Add(vertice.Position.Y);
-                vertexList.Add(vertice.Position.Z);
+                foreach (var vertice in cara.Vertices)
+                {
+                    // Posición del vértice
+                    vertexList.Add(vertice.X);
+                    vertexList.Add(vertice.Y);
+                    vertexList.Add(vertice.Z);
 
-                vertexList.Add(vertice.Color.X);
-                vertexList.Add(vertice.Color.Y);
-                vertexList.Add(vertice.Color.Z);
-                vertexList.Add(vertice.Color.W);
+                    // Color del vértice (usando el color de la cara)
+                    vertexList.Add(cara.Color.X);
+                    vertexList.Add(cara.Color.Y);
+                    vertexList.Add(cara.Color.Z);
+                    vertexList.Add(cara.Color.W);
+                }
             }
         }
 
@@ -57,9 +70,13 @@ public class ObjetoRenderer
                 
                 out vec4 ourColor;
                 
+                uniform mat4 projection;
+                uniform mat4 view;
+                uniform mat4 model;
+                
                 void main()
                 {
-                    gl_Position = vec4(aPos, 1.0);
+                    gl_Position = projection * view * model * vec4(aPos, 1.0);
                     ourColor = aColor;
                 }",
 
@@ -74,17 +91,42 @@ public class ObjetoRenderer
         );
     }
 
+    // Método para establecer las matrices
+    public void SetMatrices(Matrix4 projection, Matrix4 view, Matrix4 model)
+    {
+        _projection = projection;
+        _view = view;
+        _model = model;
+    }
+
     public void Render()
     {
         GL.UseProgram(_shader);
+
+        // Pasar las matrices al shader
+        int projectionLocation = GL.GetUniformLocation(_shader, "projection");
+        int viewLocation = GL.GetUniformLocation(_shader, "view");
+        int modelLocation = GL.GetUniformLocation(_shader, "model");
+
+        GL.UniformMatrix4(projectionLocation, false, ref _projection);
+        GL.UniformMatrix4(viewLocation, false, ref _view);
+        GL.UniformMatrix4(modelLocation, false, ref _model);
+
         GL.BindVertexArray(_vao);
 
         int vertexOffset = 0;
-        foreach (var cara in _objeto.Caras)
+        foreach (var parte in _objeto.Partes)
         {
-            GL.DrawArrays(PrimitiveType.Triangles, vertexOffset, cara.Vertices.Count);
-            vertexOffset += cara.Vertices.Count;
+            foreach (var cara in parte.Caras)
+            {
+                GL.DrawArrays(PrimitiveType.Triangles, vertexOffset, cara.Vertices.Count);
+                vertexOffset += cara.Vertices.Count;
+            }
         }
+
+        // Limpiar el estado
+        GL.BindVertexArray(0);
+        GL.UseProgram(0);
     }
 
     public void Unload()

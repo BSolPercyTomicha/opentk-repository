@@ -5,6 +5,7 @@ public static class FigurasFactory
     public static Objeto CrearMonitor()
     {
         var objeto = new Objeto();
+        var parte = new Parte();
         float ancho = 1.0f;
         float alto = 0.8f;
         float profundidad = 0.1f;
@@ -12,19 +13,15 @@ public static class FigurasFactory
         float y = 0.5f;
         float z = 0.0f;
 
-        // Color negro para el monitor
-        Vector4 colorNegro = new Vector4(0.1f, 0.1f, 0.1f, 1.0f);
-        Vector4 colorPantalla = new Vector4(0.8f, 0.8f, 0.8f, 1.0f);
-
         // Cara frontal (pantalla)
         var frente = CrearCaraCubo(
             x - ancho / 2, y - alto / 2, z + profundidad / 2,
             x + ancho / 2, y - alto / 2, z + profundidad / 2,
             x + ancho / 2, y + alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z + profundidad / 2,
-            colorPantalla
+            Color.White
         );
-        objeto.AgregarCara(frente);
+        parte.AgregarCara(frente);
 
         // Cara trasera
         var trasera = CrearCaraCubo(
@@ -32,9 +29,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto / 2, z - profundidad / 2,
             x + ancho / 2, y + alto / 2, z - profundidad / 2,
             x - ancho / 2, y + alto / 2, z - profundidad / 2,
-            colorNegro
+            Color.Black
         );
-        objeto.AgregarCara(trasera);
+        parte.AgregarCara(trasera);
 
         // Cara superior
         var superior = CrearCaraCubo(
@@ -42,9 +39,9 @@ public static class FigurasFactory
             x + ancho / 2, y + alto / 2, z - profundidad / 2,
             x + ancho / 2, y + alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z + profundidad / 2,
-            colorNegro
+            Color.Black
         );
-        objeto.AgregarCara(superior);
+        parte.AgregarCara(superior);
 
         // Cara inferior
         var inferior = CrearCaraCubo(
@@ -52,9 +49,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto / 2, z - profundidad / 2,
             x + ancho / 2, y - alto / 2, z + profundidad / 2,
             x - ancho / 2, y - alto / 2, z + profundidad / 2,
-            colorNegro
+            Color.Black
         );
-        objeto.AgregarCara(inferior);
+        parte.AgregarCara(inferior);
 
         // Cara izquierda
         var izquierda = CrearCaraCubo(
@@ -62,9 +59,9 @@ public static class FigurasFactory
             x - ancho / 2, y - alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z - profundidad / 2,
-            colorNegro
+            Color.Black
         );
-        objeto.AgregarCara(izquierda);
+        parte.AgregarCara(izquierda);
 
         // Cara derecha
         var derecha = CrearCaraCubo(
@@ -72,13 +69,14 @@ public static class FigurasFactory
             x + ancho / 2, y - alto / 2, z + profundidad / 2,
             x + ancho / 2, y + alto / 2, z + profundidad / 2,
             x + ancho / 2, y + alto / 2, z - profundidad / 2,
-            colorNegro
+            Color.Black
         );
-        objeto.AgregarCara(derecha);
+        parte.AgregarCara(derecha);
 
         // Base del monitor
-        CrearBaseMonitor(objeto, x, y - alto / 2, z, colorNegro);
+        CrearBaseMonitor(objeto, x, y - alto / 2, z, Color.Black);
 
+        objeto.AgregarParte(parte);
         return objeto;
     }
 
@@ -87,6 +85,7 @@ public static class FigurasFactory
         float baseAncho = 0.4f;
         float baseAlto = 0.3f;
         float baseProfundidad = 0.4f;
+        var parte = new Parte();
 
         // Base frontal
         var baseFrente = CrearCaraCubo(
@@ -96,7 +95,7 @@ public static class FigurasFactory
             x - baseAncho / 2, y, z - baseProfundidad / 2,
             color
         );
-        objeto.AgregarCara(baseFrente);
+        parte.AgregarCara(baseFrente);
 
         // Base trasera
         var baseTrasera = CrearCaraCubo(
@@ -106,7 +105,7 @@ public static class FigurasFactory
             x - baseAncho / 2, y, z + baseProfundidad / 2,
             color
         );
-        objeto.AgregarCara(baseTrasera);
+        parte.AgregarCara(baseTrasera);
 
         // Base superior
         var baseSuperior = CrearCaraCubo(
@@ -116,7 +115,7 @@ public static class FigurasFactory
             x - baseAncho / 2, y, z + baseProfundidad / 2,
             color
         );
-        objeto.AgregarCara(baseSuperior);
+        parte.AgregarCara(baseSuperior);
 
         // Base inferior
         var baseInferior = CrearCaraCubo(
@@ -126,7 +125,7 @@ public static class FigurasFactory
             x - baseAncho / 2, y - baseAlto, z + baseProfundidad / 2,
             color
         );
-        objeto.AgregarCara(baseInferior);
+        parte.AgregarCara(baseInferior);
 
         // Base izquierda
         var baseIzquierda = CrearCaraCubo(
@@ -136,7 +135,7 @@ public static class FigurasFactory
             x - baseAncho / 2, y, z - baseProfundidad / 2,
             color
         );
-        objeto.AgregarCara(baseIzquierda);
+        parte.AgregarCara(baseIzquierda);
 
         // Base derecha
         var baseDerecha = CrearCaraCubo(
@@ -146,12 +145,15 @@ public static class FigurasFactory
             x + baseAncho / 2, y, z - baseProfundidad / 2,
             color
         );
-        objeto.AgregarCara(baseDerecha);
+        parte.AgregarCara(baseDerecha);
+
+        objeto.AgregarParte(parte);
     }
 
     public static Objeto CrearCPU()
     {
         var objeto = new Objeto();
+        var parte = new Parte();
         float ancho = 0.5f;
         float alto = 0.7f;
         float profundidad = 0.4f;
@@ -159,19 +161,15 @@ public static class FigurasFactory
         float y = 0.0f;
         float z = 0.0f;
 
-        // Color gris claro para el CPU
-        Vector4 colorGrisClaro = new Vector4(0.7f, 0.7f, 0.7f, 1.0f);
-        Vector4 colorBotones = new Vector4(0.3f, 0.3f, 0.3f, 1.0f);
-
         // Cara frontal
         var frente = CrearCaraCubo(
             x - ancho / 2, y - alto / 2, z + profundidad / 2,
             x + ancho / 2, y - alto / 2, z + profundidad / 2,
             x + ancho / 2, y + alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z + profundidad / 2,
-            colorGrisClaro
+            Color.LightGray
         );
-        objeto.AgregarCara(frente);
+        parte.AgregarCara(frente);
 
         // Cara trasera
         var trasera = CrearCaraCubo(
@@ -179,9 +177,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto / 2, z - profundidad / 2,
             x + ancho / 2, y + alto / 2, z - profundidad / 2,
             x - ancho / 2, y + alto / 2, z - profundidad / 2,
-            colorGrisClaro
+            Color.LightGray
         );
-        objeto.AgregarCara(trasera);
+        parte.AgregarCara(trasera);
 
         // Cara superior
         var superior = CrearCaraCubo(
@@ -189,9 +187,9 @@ public static class FigurasFactory
             x + ancho / 2, y + alto / 2, z - profundidad / 2,
             x + ancho / 2, y + alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z + profundidad / 2,
-            colorGrisClaro
+            Color.LightGray
         );
-        objeto.AgregarCara(superior);
+        parte.AgregarCara(superior);
 
         // Cara inferior
         var inferior = CrearCaraCubo(
@@ -199,9 +197,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto / 2, z - profundidad / 2,
             x + ancho / 2, y - alto / 2, z + profundidad / 2,
             x - ancho / 2, y - alto / 2, z + profundidad / 2,
-            colorGrisClaro
+            Color.LightGray
         );
-        objeto.AgregarCara(inferior);
+        parte.AgregarCara(inferior);
 
         // Cara izquierda
         var izquierda = CrearCaraCubo(
@@ -209,9 +207,9 @@ public static class FigurasFactory
             x - ancho / 2, y - alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z + profundidad / 2,
             x - ancho / 2, y + alto / 2, z - profundidad / 2,
-            colorGrisClaro
+            Color.LightGray
         );
-        objeto.AgregarCara(izquierda);
+        parte.AgregarCara(izquierda);
 
         // Cara derecha
         var derecha = CrearCaraCubo(
@@ -219,9 +217,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto / 2, z + profundidad / 2,
             x + ancho / 2, y + alto / 2, z + profundidad / 2,
             x + ancho / 2, y + alto / 2, z - profundidad / 2,
-            colorGrisClaro
+            Color.LightGray
         );
-        objeto.AgregarCara(derecha);
+        parte.AgregarCara(derecha);
 
         // Botón de encendido (frontal)
         var boton = CrearCaraCubo(
@@ -229,24 +227,10 @@ public static class FigurasFactory
             x + 0.05f, y + alto / 2 - 0.2f, z + profundidad / 2 + 0.01f,
             x + 0.05f, y + alto / 2 - 0.1f, z + profundidad / 2 + 0.01f,
             x - 0.05f, y + alto / 2 - 0.1f, z + profundidad / 2 + 0.01f,
-            colorBotones
+            Color.DarkGray
         );
-        objeto.AgregarCara(boton);
-
-        // Ranuras de ventilación (laterales)
-        for (int i = 0; i < 3; i++)
-        {
-            float yPos = y - alto / 2 + 0.3f + i * 0.3f;
-
-            var ranura = CrearCaraCubo(
-                x + ancho / 2 + 0.01f, yPos - 0.1f, z - 0.1f,
-                x + ancho / 2 + 0.01f, yPos - 0.1f, z + 0.1f,
-                x + ancho / 2 + 0.01f, yPos + 0.1f, z + 0.1f,
-                x + ancho / 2 + 0.01f, yPos + 0.1f, z - 0.1f,
-                colorBotones
-            );
-            objeto.AgregarCara(ranura);
-        }
+        parte.AgregarCara(boton);
+        objeto.AgregarParte(parte);
 
         return objeto;
     }
@@ -254,6 +238,7 @@ public static class FigurasFactory
     public static Objeto CrearTeclado()
     {
         var objeto = new Objeto();
+        var parte = new Parte();
         float ancho = 1.2f;
         float alto = 0.1f;
         float profundidad = 0.3f;
@@ -261,19 +246,15 @@ public static class FigurasFactory
         float y = -0.8f;
         float z = 0.0f;
 
-        // Color gris oscuro para el teclado
-        Vector4 colorGrisOscuro = new Vector4(0.3f, 0.3f, 0.3f, 1.0f);
-        Vector4 colorTeclas = new Vector4(0.1f, 0.1f, 0.1f, 1.0f);
-
         // Cara superior
         var superior = CrearCaraCubo(
             x - ancho / 2, y, z - profundidad / 2,
             x + ancho / 2, y, z - profundidad / 2,
             x + ancho / 2, y, z + profundidad / 2,
             x - ancho / 2, y, z + profundidad / 2,
-            colorGrisOscuro
+            Color.DarkGray
         );
-        objeto.AgregarCara(superior);
+        parte.AgregarCara(superior);
 
         // Cara inferior
         var inferior = CrearCaraCubo(
@@ -281,9 +262,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto, z - profundidad / 2,
             x + ancho / 2, y - alto, z + profundidad / 2,
             x - ancho / 2, y - alto, z + profundidad / 2,
-            colorGrisOscuro
+            Color.DarkGray
         );
-        objeto.AgregarCara(inferior);
+        parte.AgregarCara(inferior);
 
         // Cara frontal
         var frente = CrearCaraCubo(
@@ -291,9 +272,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto, z + profundidad / 2,
             x + ancho / 2, y, z + profundidad / 2,
             x - ancho / 2, y, z + profundidad / 2,
-            colorGrisOscuro
+            Color.DarkGray
         );
-        objeto.AgregarCara(frente);
+        parte.AgregarCara(frente);
 
         // Cara trasera
         var trasera = CrearCaraCubo(
@@ -301,9 +282,9 @@ public static class FigurasFactory
             x + ancho / 2, y - alto, z - profundidad / 2,
             x + ancho / 2, y, z - profundidad / 2,
             x - ancho / 2, y, z - profundidad / 2,
-            colorGrisOscuro
+            Color.DarkGray
         );
-        objeto.AgregarCara(trasera);
+        parte.AgregarCara(trasera);
 
         // Cara izquierda
         var izquierda = CrearCaraCubo(
@@ -311,9 +292,9 @@ public static class FigurasFactory
             x - ancho / 2, y - alto, z + profundidad / 2,
             x - ancho / 2, y, z + profundidad / 2,
             x - ancho / 2, y, z - profundidad / 2,
-            colorGrisOscuro
+            Color.DarkGray
         );
-        objeto.AgregarCara(izquierda);
+        parte.AgregarCara(izquierda);
 
         // Cara derecha
         var derecha = CrearCaraCubo(
@@ -321,23 +302,25 @@ public static class FigurasFactory
             x + ancho / 2, y - alto, z + profundidad / 2,
             x + ancho / 2, y, z + profundidad / 2,
             x + ancho / 2, y, z - profundidad / 2,
-            colorGrisOscuro
+            Color.DarkGray
         );
-        objeto.AgregarCara(derecha);
+        parte.AgregarCara(derecha);
 
-        // Teclas (en la superficie superior)
-        CrearTeclas(objeto, x - ancho / 2 + 0.1f, y + 0.01f, z - profundidad / 2 + 0.1f, colorTeclas);
+        CrearTeclas(objeto, (x - ancho / 2) + 0.02f, y, (z - profundidad / 2) + 0.02f, Color.Black);
+
+        objeto.AgregarParte(parte);
 
         return objeto;
     }
 
     private static void CrearTeclas(Objeto objeto, float startX, float y, float startZ, Vector4 color)
     {
-        float teclaSize = 0.08f;
+        float teclaSize = 0.06f;
         float spacing = 0.1f;
 
-        for (int row = 0; row < 4; row++)
+        for (int row = 0; row < 3; row++)
         {
+            var teclas = new Parte();
             for (int col = 0; col < 12; col++)
             {
                 float xPos = startX + col * spacing;
@@ -350,19 +333,10 @@ public static class FigurasFactory
                     xPos, y, zPos + teclaSize,
                     color
                 );
-                objeto.AgregarCara(tecla);
+                teclas.AgregarCara(tecla);
             }
+            objeto.AgregarParte(teclas);
         }
-
-        // Barra espaciadora (más grande)
-        var espaciadora = CrearCaraCubo(
-            startX + 2f, y, startZ + 3.5f * spacing,
-            startX + 8f, y, startZ + 3.5f * spacing,
-            startX + 8f, y, startZ + 4.5f * spacing,
-            startX + 2f, y, startZ + 4.5f * spacing,
-            color
-        );
-        objeto.AgregarCara(espaciadora);
     }
 
     private static Cara CrearCaraCubo(float x1, float y1, float z1,
@@ -371,17 +345,15 @@ public static class FigurasFactory
                                      float x4, float y4, float z4,
                                      Vector4 color)
     {
-        var cara = new Cara();
+        var cara = new Cara(color);
 
-        // Primer triángulo
-        cara.AgregarVertice(new Vertice(x1, y1, z1, color.X, color.Y, color.Z, color.W));
-        cara.AgregarVertice(new Vertice(x2, y2, z2, color.X, color.Y, color.Z, color.W));
-        cara.AgregarVertice(new Vertice(x3, y3, z3, color.X, color.Y, color.Z, color.W));
+        cara.AgregarVertice(new Vector3(x1, y1, z1));
+        cara.AgregarVertice(new Vector3(x2, y2, z2));
+        cara.AgregarVertice(new Vector3(x3, y3, z3));
 
-        // Segundo triángulo
-        cara.AgregarVertice(new Vertice(x1, y1, z1, color.X, color.Y, color.Z, color.W));
-        cara.AgregarVertice(new Vertice(x3, y3, z3, color.X, color.Y, color.Z, color.W));
-        cara.AgregarVertice(new Vertice(x4, y4, z4, color.X, color.Y, color.Z, color.W));
+        cara.AgregarVertice(new Vector3(x1, y1, z1));
+        cara.AgregarVertice(new Vector3(x3, y3, z3));
+        cara.AgregarVertice(new Vector3(x4, y4, z4));
 
         return cara;
     }
